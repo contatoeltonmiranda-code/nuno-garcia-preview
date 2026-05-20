@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="pt-PT" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nuno Garcia · Cinematic Color Lab · Lisboa</title>
+<meta name="description" content="Formação presencial em Color Grading no DaVinci Resolve em Lisboa. Máximo dois alunos por turma, estúdio profissional, certificação Blackmagic Design. Quase 30 anos de cinema e televisão." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080808;
+    --bg-1:#0e0e0e;
+    --bg-2:#141414;
+    --red:#e8001c;
+    --red-soft:#ff3043;
+    --text-0:#f2f2f2;
+    --text-1:#c4c4c4;
+    --text-2:#888888;
+    --text-3:#4a4a4a;
+    --border:#1f1f1f;
+    --gold:#cfae6e;
+  }
+  html,body{background:var(--bg-0); color:var(--text-0);}
+  body{
+    font-family:'Inter',sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .font-display{font-family:'Michroma',sans-serif;}
+  .font-mono{font-family:'JetBrains Mono',monospace;}
+  /* letterboxing */
+  .letterbox{position:absolute; left:0; right:0; height:1px; background:linear-gradient(to right, transparent, #2a2a2a, transparent);}
+  /* grid background */
+  .grid-bg{
+    background-image:
+      linear-gradient(to right, rgba(232,0,28,0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(232,0,28,0.04) 1px, transparent 1px);
+    background-size: 120px 120px;
+  }
+  .grid-bg-fine{
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  /* Ghost word */
+  .ghost-word{
+    font-family:'Michroma',sans-serif;
+    font-weight:400;
+    font-size:13vw;
+    line-height:1;
+    letter-spacing:0;
+    background:linear-gradient(90deg, rgba(255,255,255,0.025), rgba(232,0,28,0.07), rgba(255,255,255,0.02));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    white-space:nowrap;
+  }
+  /* CTA primary */
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:1rem;
+    border:1px solid #232323; background:rgba(12,12,12,0.9);
+    padding:1rem 1.75rem;
+    border-radius:8px;
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:9px; letter-spacing:0.02em; text-transform:uppercase;
+    color:var(--text-0);
+    transition:all .3s;
+  }
+  .btn-primary:hover{border-color:rgba(232,0,28,0.6); color:var(--red);}
+  .btn-primary .dot{width:6px; height:6px; background:var(--red); transition:background .3s;}
+  .btn-primary:hover .dot{background:var(--red-soft);}
+  .btn-ghost{
+    display:inline-flex; align-items:center; gap:0.75rem;
+    border:1px solid var(--border); background:transparent;
+    padding:1rem 1.75rem;
+    border-radius:8px;
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:9px; letter-spacing:0.02em; text-transform:uppercase;
+    color:var(--text-1);
+    transition:all .3s;
+  }
+  .btn-ghost:hover{border-color:rgba(232,0,28,0.4); color:var(--red);}
+  /* card hover */
+  .env-card{transition:border-color .5s ease; border-radius:14px; overflow:hidden;}
+  .env-card:hover{border-color:rgba(232,0,28,0.35);}
+  /* cube wireframe */
+  .cube-stack > div{transition:transform .7s ease;}
+  /* eyebrow */
+  .eyebrow{
+    display:flex; align-items:center; gap:1rem;
+  }
+  .eyebrow .bar{width:32px; height:1px; background:var(--red);}
+  .eyebrow .label{
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:9px; letter-spacing:0.04em; text-transform:uppercase;
+    color:#d4afaf;
+  }
+  /* divider */
+  .divider-fade{
+    height:1px;
+    background:linear-gradient(to right, var(--border), #2a2a2a, transparent);
+  }
+  /* nav */
+  .topnav a{font-family:'Michroma',sans-serif; font-weight:400; font-size:9px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-2); transition:color .3s;}
+  .topnav a:hover{color:var(--red);}
+  /* details labels */
+  .spec-label{font-family:'Michroma',sans-serif; font-weight:400; font-size:8px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-2);}
+  .spec-value{font-family:'Inter',sans-serif; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:#e4e4e4;}
+  /* hero h1 sizing */
+  .hero-h1{
+    font-family:'Michroma',sans-serif; font-weight:400; text-transform:uppercase;
+    line-height:1.05; letter-spacing:0;
+    font-size:clamp(2rem, 7vw, 5.4rem);
+  }
+  /* gradient text accent (cinematic red) */
+  .text-grad-red, .hero-h1 .red{
+    background:linear-gradient(180deg,#ff3a52 0%,#e8001c 45%,#a8000f 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+    font-weight:400;
+    filter:drop-shadow(0 0 24px rgba(232,0,28,0.25));
+  }
+  /* helper for inline span that already has text-[#e8001c] */
+  .grad-stat{
+    background:linear-gradient(180deg,#ff3a52 0%,#e8001c 50%,#9c000e 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+    filter:drop-shadow(0 0 18px rgba(232,0,28,0.22));
+  }
+  .section-h2{
+    font-family:'Michroma',sans-serif; font-weight:400; text-transform:uppercase;
+    line-height:1.1; letter-spacing:0;
+    font-size:clamp(1.55rem, 3.9vw, 2.65rem);
+  }
+  .section-h3{
+    font-family:'Michroma',sans-serif; font-weight:400;
+    line-height:1.1; letter-spacing:0;
+    font-size:clamp(1rem, 1.75vw, 1.6rem);
+  }
+  .field-quote-mark{
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:4.5rem; line-height:0.6; color:var(--red);
+    opacity:0.7;
+  }
+  /* testemunhos wrapper (parent card with video bg) */
+  .testem-wrap{
+    position:relative;
+    border-radius:28px;
+    border:1px solid #1f1f1f;
+    overflow:hidden;
+    isolation:isolate;
+    padding:3rem 2rem;
+    background:#0a0a0a;
+  }
+  @media (min-width:768px){.testem-wrap{padding:4.5rem 4rem;}}
+  @media (min-width:1280px){.testem-wrap{padding:5rem 5rem;}}
+  .testem-wrap-video{
+    position:absolute !important; inset:0 !important;
+    width:100% !important; height:100% !important;
+    object-fit:cover; opacity:0.55; z-index:0 !important;
+    pointer-events:none;
+  }
+  .testem-wrap::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at 12% 8%, rgba(232,0,28,0.12) 0%, transparent 45%);
+    z-index:1; pointer-events:none;
+  }
+  .testem-wrap::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.6) 100%);
+    z-index:1; pointer-events:none;
+  }
+  .testem-wrap > *:not(.testem-wrap-video){position:relative; z-index:2;}
+  /* linha topo card */
+  .testem-card{position:relative;}
+  .testem-card::before{
+    content:""; position:absolute;
+    top:0; left:28px;
+    width:72px; height:4px;
+    border-radius:999px;
+    background:linear-gradient(90deg, #e8001c 0%, #ff3a52 60%, rgba(232,0,28,0) 100%);
+    box-shadow:0 0 12px rgba(232,0,28,0.4);
+    transform:translateY(-2px);
+  }
+  /* timeline year */
+  .year-num{
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:clamp(1.6rem, 3.5vw, 2.6rem); line-height:1;
+    color:var(--red);
+  }
+  /* checklist dot */
+  .check-dot{width:6px; height:6px; background:var(--red); display:inline-block; margin-top:8px; flex:none;}
+  /* price */
+  .price-num{font-family:'Michroma',sans-serif; font-weight:400; font-size:2.2rem; line-height:1; color:var(--text-0);}
+  .price-num small{font-size:1.2rem; color:var(--text-2); margin-left:0.25rem;}
+  /* form */
+  .field input, .field select, .field textarea{
+    width:100%; background:#0a0a0a; border:1px solid var(--border);
+    padding:0.85rem 1rem; color:var(--text-0);
+    border-radius:8px;
+    font-family:'Inter',sans-serif; font-size:0.95rem;
+    transition:border-color .3s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--red);}
+  .field label{
+    display:block; margin-bottom:0.5rem;
+    font-family:'Michroma',sans-serif; font-weight:400; font-size:8px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-2);
+  }
+  /* Pills/badges/chips/cards radius */
+  .pill{border-radius:999px;}
+  .card-radius{border-radius:14px; overflow:hidden;}
+  .chip-pill{border-radius:999px;}
+  .panel-radius{border-radius:16px;}
+
+  /* hero background video */
+  .hero-video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    z-index:0;
+    opacity:0.38;
+    pointer-events:none;
+  }
+
+  /* perfis links pills */
+  .profile-links{display:flex; flex-wrap:wrap; align-items:center; gap:10px;}
+  .profile-label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#888; margin-right:6px;}
+  .profile-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    color:#c4c4c4; text-decoration:none; white-space:nowrap;
+    border:1px solid #1f1f1f; border-radius:999px;
+    padding:6px 14px;
+    transition:all .25s;
+  }
+  .profile-pill:hover{border-color:#e8001c; color:#e8001c;}
+  .profile-pill .ar{font-size:10px; opacity:0.7;}
+
+  /* cursor blur red follower */
+  .cursor-glow{
+    position:fixed; top:0; left:0;
+    width:200px; height:200px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(232,0,28,0.32) 0%, rgba(232,0,28,0.1) 40%, transparent 75%);
+    filter:blur(22px);
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    z-index:9999;
+    mix-blend-mode:screen;
+    transition:opacity .4s ease;
+    opacity:0;
+    will-change:transform;
+  }
+  .cursor-glow.active{opacity:1;}
+  @media (pointer:coarse){.cursor-glow{display:none;}}
+
+  /* nuno photo placeholder */
+  .nuno-photo{aspect-ratio:3/5.5; background:#0a0a0a;}
+  .nuno-photo .photo-inner{position:relative; width:100%; height:100%;}
+  .nuno-photo::after{content:""; position:absolute; inset:0; box-shadow:inset 0 -80px 80px -40px rgba(0,0,0,0.85); pointer-events:none;}
+  .nuno-photo::before{content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(232,0,28,0.05) 0%, transparent 40%); pointer-events:none; z-index:1;}
+  .photo-caption{position:absolute; left:14px; bottom:14px; display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:#888; z-index:2;}
+  .photo-caption .dot{width:6px; height:6px; background:#e8001c; border-radius:50%; box-shadow:0 0 12px #e8001c;}
+
+  /* timeline cards (percurso) */
+  .timeline-card{
+    position:relative;
+    padding:1.75rem;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(20,20,20,0.55) 0%, rgba(10,10,10,0.4) 100%);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    overflow:hidden;
+    transition:transform .35s ease, background .35s ease;
+  }
+  .timeline-card::before{
+    content:""; position:absolute; inset:0;
+    padding:1px; border-radius:inherit;
+    background:linear-gradient(135deg, rgba(232,0,28,0.55) 0%, rgba(232,0,28,0.12) 35%, rgba(255,255,255,0.04) 70%, rgba(232,0,28,0.35) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none;
+  }
+  .timeline-card::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    background:radial-gradient(circle at 0% 0%, rgba(232,0,28,0.08), transparent 60%);
+    opacity:0; transition:opacity .4s ease; pointer-events:none;
+  }
+  .timeline-card:hover::after{opacity:1;}
+  .timeline-card:hover{transform:translateY(-2px); background:linear-gradient(180deg, rgba(28,16,16,0.55) 0%, rgba(14,8,8,0.4) 100%);}
+  .timeline-card .tl-icon{
+    width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:12px;
+    background:linear-gradient(180deg, rgba(232,0,28,0.12), rgba(232,0,28,0.02));
+    border:1px solid rgba(232,0,28,0.25);
+    color:#e8001c;
+    margin-bottom:1rem;
+  }
+  .timeline-card .tl-icon svg{width:22px; height:22px;}
+  .timeline-card .tl-tag{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#e8001c; margin-bottom:0.55rem;}
+  .timeline-card .tl-title{font-family:'Michroma',sans-serif; font-weight:400; font-size:clamp(1rem,1.4vw,1.2rem); color:#f2f2f2; margin-bottom:0.85rem; letter-spacing:0.01em; line-height:1.2;}
+  .timeline-card .tl-body{color:#9a9a9a; font-size:0.875rem; line-height:1.7; font-weight:300;}
+  .timeline-card .tl-body strong{color:#c4c4c4; font-weight:500;}
+
+  /* colorshop cards */
+  .shop-card{
+    position:relative;
+    padding:2.25rem;
+    border-radius:20px;
+    background:linear-gradient(180deg, rgba(20,20,20,0.55) 0%, rgba(10,10,10,0.4) 100%);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    overflow:hidden;
+    transition:transform .35s ease, background .35s ease;
+  }
+  .shop-card::before{
+    content:""; position:absolute; inset:0;
+    padding:1px; border-radius:inherit;
+    background:linear-gradient(135deg, rgba(232,0,28,0.55) 0%, rgba(232,0,28,0.12) 35%, rgba(255,255,255,0.04) 70%, rgba(232,0,28,0.35) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none;
+  }
+  .shop-card::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    background:radial-gradient(circle at 0% 0%, rgba(232,0,28,0.08), transparent 60%);
+    opacity:0; transition:opacity .4s ease; pointer-events:none;
+  }
+  .shop-card:hover::after{opacity:1;}
+  .shop-card:hover{transform:translateY(-2px); background:linear-gradient(180deg, rgba(28,16,16,0.55) 0%, rgba(14,8,8,0.4) 100%);}
+  .shop-card-featured::before{
+    background:linear-gradient(135deg, rgba(232,0,28,0.85) 0%, rgba(232,0,28,0.4) 50%, rgba(232,0,28,0.65) 100%);
+  }
+
+  /* clientes section: gradient top border (no solid line, fade edges) */
+  .clientes-section{position:relative;}
+  .clientes-section::before{
+    content:""; position:absolute; top:0; left:0; right:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent 0%, rgba(232,0,28,0.55) 25%, rgba(232,0,28,0.85) 50%, rgba(232,0,28,0.55) 75%, transparent 100%);
+    box-shadow:0 0 22px rgba(232,0,28,0.35);
+    pointer-events:none;
+    z-index:5;
+  }
+  /* client cards with grayscale background image + dark overlay */
+  .client-card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    isolation:isolate;
+    min-height:340px;
+    background-color:#0e0e0e;
+  }
+  .client-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:var(--bg);
+    background-size:cover; background-position:center;
+    filter:grayscale(0.85) contrast(1) brightness(0.8);
+    opacity:0.7;
+    z-index:0;
+    transition:opacity .5s ease, transform .8s ease;
+  }
+  .client-card::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.7) 100%);
+    z-index:1;
+  }
+  .client-card:hover::before{opacity:0.85; transform:scale(1.04);}
+  .client-card .cc-inner{position:relative; z-index:2; padding:1.75rem; height:100%;}
+  .cc-tag{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#e8001c; margin-bottom:1rem;}
+  .cc-chip{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; border:1px solid rgba(255,255,255,0.08); background:rgba(8,8,8,0.45); padding:6px 12px; border-radius:8px; color:#c4c4c4; backdrop-filter:blur(2px);}
+  .cc-chip-dim{color:#888;}
+  .cc-item{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em; color:#c4c4c4; display:flex; align-items:flex-start; gap:8px;}
+  .cc-item-dim{color:#888;}
+  .cc-bullet{color:#e8001c; flex-shrink:0;}
+
+  /* galeria carousel */
+  .galeria-section{background:#000;}
+  .galeria-stage{position:relative; width:100%; height:80vh; min-height:520px; max-height:780px; overflow:hidden;}
+  .gal-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1.4s ease-in-out; will-change:opacity;}
+  .gal-slide.active{opacity:1;}
+  .galeria-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.75) 100%); pointer-events:none; z-index:2;}
+  .galeria-info{position:absolute; left:0; right:0; bottom:0; padding:3rem 6vw 2.5rem; z-index:3; max-width:1400px; margin:0 auto;}
+  .galeria-dots{display:flex; gap:8px; margin-top:1.5rem;}
+  .gal-dot{width:30px; height:2px; background:rgba(255,255,255,0.25); border:0; cursor:pointer; padding:0; transition:background .3s, width .3s;}
+  .gal-dot.on{background:#e8001c; width:50px;}
+  .gal-dot:hover{background:rgba(232,0,28,0.6);}
+
+  /* vertical rain (metodo) */
+  .vrain{position:absolute; inset:0; overflow:hidden; pointer-events:none; mix-blend-mode:screen; opacity:0.7;}
+  .vrain-line{
+    position:absolute; top:-25%;
+    width:1px; height:35%;
+    background:linear-gradient(180deg, rgba(232,0,28,0) 0%, rgba(232,0,28,0.55) 50%, rgba(232,0,28,0) 100%);
+    animation:vrain-fall linear infinite;
+    will-change:transform;
+    box-shadow:0 0 8px rgba(232,0,28,0.45);
+  }
+  @keyframes vrain-fall{
+    0%{transform:translateY(0);}
+    100%{transform:translateY(380%);}
+  }
+
+  /* metodo cube central image */
+  .cube-core{position:relative;}
+  .cube-img{
+    position:absolute; inset:0;
+    background-image:url('assets/metodo-bg.jpg');
+    background-size:cover; background-position:center;
+    filter:grayscale(0.7) contrast(1) brightness(0.7);
+    opacity:0.55;
+  }
+  .cube-core::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(14,14,14,0.25) 0%, rgba(14,14,14,0.75) 100%);
+    pointer-events:none;
+  }
+
+  /* newsletter form */
+  .newsletter-form{
+    display:flex; gap:10px; min-width:320px;
+    flex-wrap:wrap; align-items:stretch;
+  }
+  .newsletter-input{
+    flex:1; min-width:220px;
+    background:rgba(8,8,8,0.55);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:999px;
+    padding:12px 20px;
+    color:#f2f2f2;
+    font-family:'Inter',sans-serif; font-weight:300; font-size:14px;
+    outline:none;
+    transition:border-color .25s ease, background .25s ease;
+    backdrop-filter:blur(2px);
+  }
+  .newsletter-input::placeholder{color:#888;}
+  .newsletter-input:focus{border-color:rgba(232,0,28,0.55); background:rgba(8,8,8,0.75);}
+  .newsletter-btn{
+    display:inline-flex; align-items:center; gap:12px;
+    border:1px solid rgba(232,0,28,0.5);
+    background:linear-gradient(180deg, rgba(232,0,28,0.18) 0%, rgba(232,0,28,0.08) 100%);
+    color:#f2f2f2;
+    font-family:'Michroma',sans-serif; font-weight:400;
+    font-size:9px; letter-spacing:0.04em; text-transform:uppercase;
+    padding:12px 22px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .3s ease;
+    box-shadow:0 0 0 0 rgba(232,0,28,0);
+  }
+  .newsletter-btn:hover{
+    background:linear-gradient(180deg, rgba(232,0,28,0.35) 0%, rgba(232,0,28,0.15) 100%);
+    border-color:#e8001c;
+    color:#fff;
+    box-shadow:0 0 22px rgba(232,0,28,0.35);
+  }
+  .newsletter-btn .dot{
+    width:6px; height:6px; background:#e8001c; border-radius:50%;
+    box-shadow:0 0 10px rgba(232,0,28,0.7);
+  }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-[#080808]/70 border-b border-[#141414]">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8001c" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="5 17 12 12 19 17"></polyline>
+        <polyline points="5 12 12 7 19 12"></polyline>
+        <polyline points="5 7 12 2 19 7"></polyline>
+      </svg>
+      <span class="font-display text-[9px] tracking-[0.04em] uppercase text-[#f2f2f2]" style="font-weight:400;">
+        Nuno Garcia <span class="text-[#888]">|| Cinematic Color Lab</span>
+      </span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 topnav">
+      <a href="#sobre">Sobre</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#metodo">Método</a>
+      <a href="#colorshop">ColorShop</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a href="#contacto" class="btn-primary hidden md:inline-flex !py-2 !px-4 !text-[10px]">
+      <span class="dot"></span>
+      <span>Reservar Vaga</span>
+    </a>
+  </div>
+</nav>
+
+<!-- 01. HERO -->
+<section class="relative min-h-screen overflow-hidden pt-24 pb-12 flex items-center">
+  <!-- video background -->
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="assets/hero-bg.mp4" type="video/mp4">
+  </video>
+  <!-- dark overlay over video -->
+  <div class="absolute inset-0 bg-black/55 pointer-events-none"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/80 pointer-events-none"></div>
+
+  <!-- grid background -->
+  <div class="absolute inset-0 grid-bg pointer-events-none opacity-30"></div>
+
+  <!-- ambient glow -->
+  <div class="absolute left-1/2 bottom-[18%] -translate-x-1/2 h-[160px] w-[600px] bg-[#e8001c]/10 blur-[120px] pointer-events-none"></div>
+
+  <!-- ghost word -->
+  <div class="absolute top-[28%] left-0 w-full overflow-hidden pointer-events-none select-none flex justify-center">
+    <span class="ghost-word">CINEMA</span>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-12 items-end">
+    <!-- Left: copy -->
+    <div class="xl:col-span-8 flex flex-col justify-end relative z-20 pt-10 md:pt-16">
+      <!-- Phase label -->
+      <div class="eyebrow mb-7 md:mb-9">
+        <span class="bar"></span>
+        <span class="label">Master Colorist · DaVinci Resolve · Lisboa</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="hero-h1 mb-8 max-w-full">
+        <span class="block text-[0.32em] tracking-[0.25em] font-mono font-light text-[#c4c4c4] mb-4">Cinematic Color Lab</span>
+        <span class="block red">NUNO GARCIA</span>
+      </h1>
+
+      <!-- Intro -->
+      <p class="text-[#c4c4c4] text-[0.98rem] md:text-base max-w-[42rem] font-light leading-relaxed mb-10">
+        Formação presencial distintiva em Color Grading no DaVinci Resolve — máximo dois alunos por sessão, em estúdio profissional, com quase 30 anos de experiência no cinema e televisão portugueses.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="#cursos" class="btn-primary">
+          <span class="inline-flex items-center gap-3">
+            <span class="dot"></span>
+            <span>Ver os Cursos</span>
+          </span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M13 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#sobre" class="btn-ghost">Conhecer o Instrutor</a>
+      </div>
+    </div>
+
+    <!-- Right: hero panel "Active Studio" (6 specs) -->
+    <div class="xl:col-span-4 flex justify-end relative z-10 mt-12 xl:mt-0">
+      <div class="relative w-full max-w-[26rem] border border-[#1f1f1f] bg-[#0a0a0a]/70 backdrop-blur-sm px-6 py-7 rounded-xl">
+        <!-- accent lines -->
+        <div class="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-[#e8001c]/60 to-transparent"></div>
+        <div class="absolute -left-px top-6 bottom-6 w-px bg-gradient-to-b from-transparent via-[#e8001c]/60 to-transparent"></div>
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-5">
+          <span class="font-display text-[10px] uppercase tracking-[0.18em] text-[#e4e4e4]" style="font-weight:400;">Active Studio</span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 bg-[#e8001c] rounded-full animate-pulse"></span>
+            <span class="font-mono text-[8px] uppercase tracking-[0.18em] text-[#888]">Live</span>
+          </span>
+        </div>
+
+        <!-- Specs (6 linhas) -->
+        <div class="flex flex-col gap-3">
+          <div class="flex items-baseline justify-between gap-4 border-b border-[#161616] pb-2">
+            <span class="spec-label">Local</span>
+            <span class="spec-value text-right">Safra · Lisboa, Portugal</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-[#161616] pb-2">
+            <span class="spec-label">Experiência</span>
+            <span class="spec-value text-right">~30 anos</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-[#161616] pb-2">
+            <span class="spec-label">Turma</span>
+            <span class="spec-value text-right">2 alunos max</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-[#161616] pb-2">
+            <span class="spec-label">Estado</span>
+            <span class="spec-value text-right" style="color:#ff5566;">Vagas Abertas</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-[#161616] pb-2">
+            <span class="spec-label">Certificação</span>
+            <span class="spec-value text-right">BMD Trainer</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-4">
+            <span class="spec-label">Formação</span>
+            <span class="spec-value text-right">WA — World Academy</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- divider gradient bar between hero & sobre -->
+<div aria-hidden="true" class="relative z-20 -mt-px">
+  <div class="h-[3px] w-1/2 bg-gradient-to-r from-[#e8001c] via-[#ff3a52] to-[#e8001c]/0 shadow-[0_0_28px_rgba(232,0,28,0.45)]"></div>
+</div>
+
+<!-- 02. SOBRE — THE THESIS -->
+<section id="sobre" class="relative z-10 py-28 md:py-32 overflow-hidden border-t border-[#1f1f1f]">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-0 bg-[#e8001c]/[0.015] backdrop-blur-[1px]"></div>
+    <div class="absolute inset-0 grid-bg opacity-[0.08]"></div>
+    <div class="absolute left-[18%] top-[18%] h-[180px] w-[180px] rounded-full bg-[#e8001c]/[0.04] blur-[100px]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-10 xl:gap-14">
+      <!-- Left eyebrow + foto -->
+      <div class="xl:col-span-3 flex flex-col gap-8">
+        <div class="eyebrow xl:pt-2">
+          <span class="bar"></span>
+          <span class="label">Sobre o Nuno</span>
+        </div>
+        <figure class="nuno-photo rounded-2xl overflow-hidden border border-[#1f1f1f] relative" aria-label="Retrato de Nuno Garcia">
+          <div class="photo-inner">
+            <img src="assets/nuno-profile.jpg" alt="Nuno Garcia, Master Colorist" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="photo-caption">
+              <span class="dot"></span>
+              <span>Nuno Garcia &middot; Lisboa</span>
+            </div>
+          </div>
+        </figure>
+      </div>
+
+      <!-- Right content -->
+      <div class="xl:col-span-9">
+        <h2 class="section-h2 max-w-[14ch] text-[#f2f2f2]">
+          Quase 3 Décadas
+          <span class="block grad-stat font-display">a Dar Cor</span>
+          <span class="block text-[#c4c4c4]">ao Cinema</span>
+        </h2>
+
+        <div class="mt-10 md:mt-12 divider-fade"></div>
+
+        <div class="mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 max-w-5xl">
+          <p class="text-[#9a9a9a] text-[1rem] md:text-[1.05rem] leading-[1.9] font-light">
+            Nuno Garcia nasceu em Lisboa, onde se formou em <strong class="text-[#e4e4e4] font-medium">Realização de Cinema</strong>. Ao estagiar na antiga CEE – Centro de Edição Especial, apaixonou-se pela pós-produção e nunca mais a abandonou. Desde então, construiu uma das carreiras mais sólidas e versáteis da colorimetria audiovisual em Portugal e além-fronteiras.
+          </p>
+          <p class="text-[#9a9a9a] text-[1rem] md:text-[1.05rem] leading-[1.9] font-light">
+            Com mais de <strong class="text-[#e4e4e4] font-medium">80 filmes e séries</strong> no currículo, trabalhou para as principais produtoras nacionais e internacionais, colaborou com marcas globais como <strong class="text-[#e4e4e4] font-medium">Nike, Coca-Cola, McDonald's, BMW, IKEA, L'Oréal e Vodafone</strong>, e levou o seu talento até à Suécia, Ucrânia e Egito. É Certified Trainer pela <strong class="text-[#e4e4e4] font-medium">Blackmagic Design</strong> e formador na <strong class="text-[#e4e4e4] font-medium">World Academy</strong> em Lisboa.
+          </p>
+        </div>
+
+        <!-- Certifications (literal do oficial) -->
+        <div class="mt-10 md:mt-12 max-w-3xl flex flex-col gap-3">
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Blackmagic Design Authorized Trainer — DaVinci Resolve</span></div>
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Formador — World Academy, Lisboa</span></div>
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Professor em Escolas Privadas de Cinema e Comunicação</span></div>
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Formado em Realização de Cinema — Lisboa</span></div>
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Cursos avançados na Rank Cintel e DaVinci com Stuart Black Jones</span></div>
+          <div class="flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span><span class="font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">Certificações: DaVinci 888, DaVinci 2K, Spirit Telecine</span></div>
+        </div>
+
+        <!-- Premium quote note (literal do original — Certificação Oficial) -->
+        <div class="mt-10 md:mt-12 max-w-3xl border-t border-[#1f1f1f] pt-6">
+          <div class="flex items-start gap-3">
+            <span class="mt-1.5 w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span>
+            <p class="text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-[#d4afaf] leading-relaxed font-mono">
+              Nuno Garcia é Blackmagic Design Authorized Training Partner — a única entidade reconhecida oficialmente para ministrar formação em DaVinci Resolve em Portugal.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- 02b. PERCURSO + CLIENTES (full-width) -->
+<section id="percurso" class="relative z-10 py-28 md:py-32 overflow-hidden border-t border-[#1f1f1f]">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-0 grid-bg opacity-[0.06]"></div>
+    <div class="absolute right-[14%] top-[20%] h-[200px] w-[200px] rounded-full bg-[#e8001c]/[0.05] blur-[110px]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12">
+    <div class="eyebrow mb-6">
+      <span class="bar"></span>
+      <span class="label">Percurso</span>
+    </div>
+    <h2 class="section-h2 max-w-[14ch] text-[#f2f2f2]">
+      Uma Carreira
+      <span class="block grad-stat font-display">de Referência</span>
+    </h2>
+
+    <!-- Timeline (5 entradas literais do oficial) -->
+    <div class="mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <article class="timeline-card">
+        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"/><path d="M9 7 L17 7 L17 15"/></svg></div>
+        <div class="tl-tag">Início de Carreira</div>
+        <h3 class="tl-title">CEE &amp; Telecinema</h3>
+        <p class="tl-body">Começa como assistente de Telecinema, manuseando película 16mm e 35mm e fazendo grading one-light para montadores. Adquire um domínio raro da imagem analógica que poucos coloristas digitais possuem.</p>
+      </article>
+      <article class="timeline-card">
+        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"/><path d="M9 7 L17 7 L17 15"/></svg></div>
+        <div class="tl-tag">Consolidação</div>
+        <h3 class="tl-title">LightFilm — Sénior Colorista</h3>
+        <p class="tl-body">Como colorista sénior na LightFilm, faz cursos avançados com Stuart Black Jones (Rank Cintel e DaVinci). Executa trabalhos para todas as produtoras nacionais e internacionais: publicidade, cinema, telefilmes e videoclipes.</p>
+      </article>
+      <article class="timeline-card">
+        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"/><path d="M9 7 L17 7 L17 15"/></svg></div>
+        <div class="tl-tag">Tobis Portuguesa</div>
+        <h3 class="tl-title">Passagem Histórica</h3>
+        <p class="tl-body">Integra a mítica Tobis Portuguesa, um dos estúdios de pós-produção mais emblemáticos da história do cinema nacional, aprofundando o seu conhecimento do workflow cinematográfico de alto nível.</p>
+      </article>
+      <article class="timeline-card">
+        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"/><path d="M9 7 L17 7 L17 15"/></svg></div>
+        <div class="tl-tag">2008 – 2012 · Suécia</div>
+        <h3 class="tl-title">The Chimney Pot</h3>
+        <p class="tl-body">Sénior colorista na <strong>The Chimney Pot</strong>, empresa sueca de pós-produção de referência internacional. Trabalha com os mais famosos realizadores e diretores de fotografia do mundo, assistindo à transição histórica da película para o digital.</p>
+      </article>
+      <article class="timeline-card md:col-span-2">
+        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"/><path d="M9 7 L17 7 L17 15"/></svg></div>
+        <div class="tl-tag">2012 – Presente · EasyColor</div>
+        <h3 class="tl-title">100% Dedicado ao Color Grading &amp; Formação</h3>
+        <p class="tl-body">Funda o seu próprio estúdio e dedica-se inteiramente ao grading e à criação de workflows de pós-produção. Paralelamente, consolida a sua carreira como formador na <strong>World Academy</strong>, em escolas privadas de cinema e em eventos como o Cinemalogia (Universidade de Coimbra). Certificado pela Blackmagic Design como Authorized Trainer em DaVinci Resolve.</p>
+      </article>
+    </div>
+
+    <!-- Numeros de destaque (5 cards literais do oficial) -->
+    <div class="mt-12 grid grid-cols-2 md:grid-cols-5 gap-px bg-[#1f1f1f] rounded-2xl overflow-hidden">
+      <div class="bg-[#080808]/80 py-10 px-6 text-center">
+        <div class="font-display text-[2.5rem] grad-stat leading-none">30</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888] mt-2">Anos de<br>Carreira</div>
+      </div>
+      <div class="bg-[#080808]/80 py-10 px-6 text-center">
+        <div class="font-display text-[2.5rem] grad-stat leading-none">80+</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888] mt-2">Filmes &amp;<br>Séries</div>
+      </div>
+      <div class="bg-[#080808]/80 py-10 px-6 text-center">
+        <div class="font-display text-[2.5rem] grad-stat leading-none">4+</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888] mt-2">Países<br>Internacionais</div>
+      </div>
+      <div class="bg-[#080808]/80 py-10 px-6 text-center">
+        <div class="font-display text-[2.5rem] grad-stat leading-none">BMD</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888] mt-2">Certified<br>Trainer</div>
+      </div>
+      <div class="bg-[#080808]/80 py-10 px-6 text-center">
+        <div class="font-display text-[2.5rem] grad-stat leading-none">WA</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888] mt-2">World<br>Academy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 02c. CLIENTES & PROJETOS (full-width) -->
+<section id="clientes" class="clientes-section relative z-10 pt-28 md:pt-32 pb-14 md:pb-16 overflow-hidden">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-0 grid-bg opacity-[0.06]"></div>
+    <div class="absolute left-[12%] bottom-[18%] h-[200px] w-[200px] rounded-full bg-[#e8001c]/[0.05] blur-[110px]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12">
+    <div class="eyebrow mb-6">
+      <span class="bar"></span>
+      <span class="label">Clientes &amp; Projetos</span>
+    </div>
+    <h2 class="section-h2 max-w-[20ch] text-[#f2f2f2] mb-10">
+      Marcas &amp; <span class="block grad-stat font-display">Produções Internacionais</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <article class="client-card" style="--bg:url('assets/result-01.jpg')">
+        <div class="cc-inner">
+          <div class="cc-tag">Marcas Globais</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="cc-chip">Nike</span>
+            <span class="cc-chip">Coca-Cola</span>
+            <span class="cc-chip">McDonald's</span>
+            <span class="cc-chip">BMW</span>
+            <span class="cc-chip">IKEA</span>
+            <span class="cc-chip">L'Oréal</span>
+            <span class="cc-chip">Unitel</span>
+            <span class="cc-chip">EasyJet</span>
+            <span class="cc-chip">Vodafone</span>
+            <span class="cc-chip">Nestlé</span>
+            <span class="cc-chip">Al Jazeera</span>
+            <span class="cc-chip">Roshen</span>
+            <span class="cc-chip cc-chip-dim">+ outras</span>
+          </div>
+        </div>
+      </article>
+      <article class="client-card" style="--bg:url('assets/result-02.jpg')">
+        <div class="cc-inner">
+          <div class="cc-tag">Projetos Internacionais</div>
+          <div class="flex flex-col gap-2">
+            <div class="cc-item"><span class="cc-bullet">▸</span> The Blue Elephant 2 (Egito, 2019)</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> A Tree in the Sea — IMDB 9.4 (UAE)</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Listen (2020)</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> L'enfant (França, 2022)</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Do Amor Ninguém Foge (Brasil)</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Trabalhos na Suécia &amp; Ucrânia</div>
+            <div class="cc-item cc-item-dim"><span class="cc-bullet">▸</span> +80 produções nacionais e internacionais</div>
+          </div>
+        </div>
+      </article>
+      <article class="client-card" style="--bg:url('assets/result-03.jpg')">
+        <div class="cc-inner">
+          <div class="cc-tag">Formação &amp; Instituições</div>
+          <div class="flex flex-col gap-2">
+            <div class="cc-item"><span class="cc-bullet">▸</span> World Academy — Lisboa</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Cinemalogia — Univ. Coimbra</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Escolas privadas de cinema</div>
+            <div class="cc-item"><span class="cc-bullet">▸</span> Blackmagic Design Authorized Trainer</div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Links profissionais (literais do oficial) -->
+    <div class="profile-links mt-12">
+      <span class="profile-label">Perfis:</span>
+      <a href="https://www.imdb.com/name/nm5695154/" target="_blank" rel="noopener" class="profile-pill">IMDB <span class="ar">↗</span></a>
+      <a href="https://vimeo.com/nunotk" target="_blank" rel="noopener" class="profile-pill">Vimeo <span class="ar">↗</span></a>
+      <a href="https://www.instagram.com/nuno_grading/" target="_blank" rel="noopener" class="profile-pill">Instagram <span class="ar">↗</span></a>
+      <a href="https://www.linkedin.com/in/nunogarcia" target="_blank" rel="noopener" class="profile-pill">LinkedIn <span class="ar">↗</span></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- 02d. GALERIA (full-width fade carousel) -->
+<section id="galeria" class="galeria-section relative overflow-hidden">
+  <div class="galeria-stage" role="region" aria-label="Galeria de trabalhos">
+      <div class="gal-slide active" data-i="0" style="background-image:url('assets/gal-01.jpg')"></div>
+      <div class="gal-slide" data-i="1" style="background-image:url('assets/gal-02.jpg')"></div>
+      <div class="gal-slide" data-i="2" style="background-image:url('assets/gal-03.jpg')"></div>
+      <div class="gal-slide" data-i="3" style="background-image:url('assets/gal-04.jpg')"></div>
+      <div class="gal-slide" data-i="4" style="background-image:url('assets/gal-05.jpg')"></div>
+      <div class="gal-slide" data-i="5" style="background-image:url('assets/gal-06.jpg')"></div>
+    <div class="galeria-overlay"></div>
+    <div class="galeria-info">
+      <div class="eyebrow">
+        <span class="bar"></span>
+        <span class="label">Trabalhos &amp; Resultados</span>
+      </div>
+      <h2 class="section-h2 mt-3 max-w-[20ch] text-[#f2f2f2]">
+        Imagens que <span class="grad-stat font-display">contam</span> uma história.
+      </h2>
+      <div class="galeria-dots" id="galDots"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.gal-slide');
+  var dotsBox = document.getElementById('galDots');
+  if(!slides.length || !dotsBox) return;
+  var idx = 0;
+  for (var i=0; i<slides.length; i++){
+    var d = document.createElement('button');
+    d.className = 'gal-dot' + (i===0?' on':'');
+    d.setAttribute('aria-label','Imagem '+(i+1));
+    d.dataset.i = i;
+    d.addEventListener('click', function(e){ go(parseInt(e.currentTarget.dataset.i,10)); });
+    dotsBox.appendChild(d);
+  }
+  function go(n){
+    slides[idx].classList.remove('active');
+    dotsBox.children[idx].classList.remove('on');
+    idx = (n+slides.length)%slides.length;
+    slides[idx].classList.add('active');
+    dotsBox.children[idx].classList.add('on');
+  }
+  setInterval(function(){ go(idx+1); }, 4500);
+})();
+</script>
+
+<!-- divider gradient bar between galeria & metodo (right aligned, 3x thicker) -->
+<div aria-hidden="true" class="relative z-20 -mt-px flex justify-end">
+  <div class="h-[9px] w-1/2 bg-gradient-to-l from-[#e8001c] via-[#ff3a52] to-[#e8001c]/0"></div>
+</div>
+
+<!-- 03. METODO — SYSTEM ARCHITECTURE -->
+<section id="metodo" class="relative z-10 py-28 md:py-32 overflow-hidden">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute left-[14%] top-[22%] h-[200px] w-[200px] rounded-full bg-[#e8001c]/[0.035] blur-[100px]"></div>
+    <!-- vertical rain lines (red) -->
+    <div class="vrain">
+      <span class="vrain-line" style="left:12%; animation-delay:0s;   animation-duration:7.5s;"></span>
+      <span class="vrain-line" style="left:28%; animation-delay:1.8s; animation-duration:9s;"></span>
+      <span class="vrain-line" style="left:46%; animation-delay:3.2s; animation-duration:8s;"></span>
+      <span class="vrain-line" style="left:68%; animation-delay:0.9s; animation-duration:10s;"></span>
+      <span class="vrain-line" style="left:86%; animation-delay:2.6s; animation-duration:7s;"></span>
+    </div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Left: wireframe cube -->
+      <div class="overflow-hidden flex bg-[#0a0a0a]/60 h-full min-h-[440px] p-10 md:p-14 relative items-center border border-[#1f1f1f] rounded-2xl">
+        <div class="absolute inset-0 grid-bg-fine opacity-50 pointer-events-none"></div>
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e8001c]/40 to-transparent"></div>
+        <div class="absolute right-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-[#e8001c]/25 to-transparent"></div>
+
+        <div class="z-10 relative w-full">
+          <div class="relative mx-auto w-full max-w-md h-80 cube-stack">
+            <!-- Wireframe layers, rotatéd -->
+            <div class="absolute inset-8 border border-[#2a2a2a] rotate-[-22deg]"></div>
+            <div class="absolute inset-4 border border-[#3a3a3a] rotate-[-14deg] bg-[#0a0a0a]/60 backdrop-blur-sm"></div>
+            <div class="absolute inset-0 border border-[#e8001c]/35 rotate-[-6deg] bg-[#0e0e0e] overflow-hidden cube-core"><div class="cube-img"></div></div>
+
+            <!-- corner pixels -->
+            <div class="absolute inset-0 rotate-[-6deg] pointer-events-none">
+              <div class="absolute top-0 left-0 w-3 h-3 border-l border-t border-[#e8001c]"></div>
+              <div class="absolute top-0 right-0 w-3 h-3 border-r border-t border-[#e8001c]"></div>
+              <div class="absolute bottom-0 left-0 w-3 h-3 border-l border-b border-[#e8001c]"></div>
+              <div class="absolute bottom-0 right-0 w-3 h-3 border-r border-b border-[#e8001c]"></div>
+            </div>
+
+            <!-- Step chips -->
+            <div class="absolute -left-4 top-6 flex items-center gap-2">
+              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.01</span>
+              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">Estúdio</div>
+            </div>
+            <div class="absolute right-0 top-24 flex items-center gap-2">
+              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">2 Alunos</div>
+              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.02</span>
+            </div>
+            <div class="absolute left-6 bottom-10 flex items-center gap-2">
+              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.03</span>
+              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">BMD Cert</div>
+            </div>
+            <div class="absolute right-8 bottom-2 flex items-center gap-2">
+              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">Único Autorizado</div>
+              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#e8001c]/40 rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.04</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: copy + steps -->
+      <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-6">
+          <div class="eyebrow">
+            <span class="bar"></span>
+            <span class="label">Método</span>
+          </div>
+
+          <h2 class="section-h2 max-w-[14ch] text-[#f2f2f2]">
+            Porquê <span class="text-[#e8001c] font-display">Diferente</span>
+          </h2>
+        </div>
+
+        <div class="space-y-8">
+          <div class="flex gap-6 group">
+            <div class="font-display text-[9px] text-[#888] mt-1 w-10 group-hover:text-[#e8001c] transition-colors" style="font-weight:400;">L.01</div>
+            <div class="flex-1">
+              <h3 class="font-display text-sm md:text-base uppercase text-[#f2f2f2]">Estúdio Real</h3>
+              <p class="mt-2 text-[#9a9a9a] text-sm md:text-[0.95rem] font-light leading-[1.8]">
+                Formação num estúdio profissional de pós-produção — não numa sala de aula. Aprendes com o mesmo equipamento usado na indústria.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-6 group">
+            <div class="font-display text-[9px] text-[#888] mt-1 w-10 group-hover:text-[#e8001c] transition-colors" style="font-weight:400;">L.02</div>
+            <div class="flex-1">
+              <h3 class="font-display text-sm md:text-base uppercase text-[#f2f2f2]">Máximo 2 Alunos</h3>
+              <p class="mt-2 text-[#9a9a9a] text-sm md:text-[0.95rem] font-light leading-[1.8]">
+                Atenção quase individual. Nenhum aluno fica para trás. O ritmo adapta-se ao teu nível e aos teus objetivos concretos.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-6 group">
+            <div class="font-display text-[9px] text-[#888] mt-1 w-10 group-hover:text-[#e8001c] transition-colors" style="font-weight:400;">L.03</div>
+            <div class="flex-1">
+              <h3 class="font-display text-sm md:text-base uppercase text-[#f2f2f2]">Certificação BMD</h3>
+              <p class="mt-2 text-[#9a9a9a] text-sm md:text-[0.95rem] font-light leading-[1.8]">
+                Formação ministrada por um Authorized Trainer certificado pela Blackmagic Design — a empresa criadora do DaVinci Resolve.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-6 group">
+            <div class="font-display text-[9px] text-[#888] mt-1 w-10 group-hover:text-[#e8001c] transition-colors" style="font-weight:400;">L.04</div>
+            <div class="flex-1">
+              <h3 class="font-display text-sm md:text-base uppercase text-[#f2f2f2]">Único Autorizado</h3>
+              <p class="mt-2 text-[#9a9a9a] text-sm md:text-[0.95rem] font-light leading-[1.8]">
+                Só os Authorized Trainers certificados pela Blackmagic Design estão autorizados a formar em DaVinci Resolve. É a garantia de qualidade máxima.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="max-w-2xl border-t border-[#1f1f1f] pt-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-1.5 w-1.5 h-1.5 bg-[#e8001c] shrink-0"></span>
+            <p class="text-[11px] md:text-[12px] uppercase tracking-[0.18em] text-[#d4afaf] leading-relaxed font-mono">
+              Certificação Oficial — Nuno Garcia é Blackmagic Design Authorized Training Partner, a única entidade reconhecida oficialmente para ministrar formação em DaVinci Resolve em Portugal.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04. CURSOS — PROJECTED REALITIES -->
+<section id="cursos" class="relative z-10 py-28 md:py-32 bg-[#0a0a0a] border-t border-[#1f1f1f] overflow-hidden">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute left-[12%] top-[16%] h-[200px] w-[200px] rounded-full bg-[#e8001c]/[0.035] blur-[100px]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-16">
+      <div>
+        <div class="eyebrow mb-4">
+          <span class="bar"></span>
+          <h2 class="label">Formação</h2>
+        </div>
+        <h3 class="section-h2 max-w-[14ch] text-[#f2f2f2]">
+          Escolhe o teu
+          <span class="block grad-stat font-display">Percurso</span>
+        </h3>
+        <p class="text-[0.98rem] md:text-[1.05rem] text-[#b4b4b4] font-light mt-5 max-w-2xl leading-[1.85]">
+          Três cursos desenhados para perfis distintos. Todos presenciais, em estúdio profissional, com máximo dois alunos. Uma experiência que não existe em mais lado nenhum.
+        </p>
+      </div>
+      <div class="hidden md:flex gap-2 pb-2">
+        <div class="w-2 h-2 bg-[#1f1f1f]"></div>
+        <div class="w-2 h-2 bg-[#1f1f1f]"></div>
+        <div class="w-2 h-2 bg-[#e8001c]"></div>
+        <div class="w-2 h-2 bg-[#e8001c]/50"></div>
+      </div>
+    </div>
+
+    <!-- Grid: featured big + 2 right -->
+    <div class="grid gap-6 md:grid-cols-3">
+      <!-- BIG: CURSO 02 EDITORES (FEATURED) -->
+      <div class="env-card group relative overflow-hidden bg-[#050505] border border-[#1f1f1f] md:col-span-2 md:row-span-2">
+        <!-- Visual header with featured image -->
+        <div class="relative overflow-hidden aspect-video">
+          <img src="assets/curso-featured.jpg" alt="Sessao de Color Grading" class="absolute inset-0 w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-gradient-to-br from-[#1a0008]/40 via-[#0a0a0a]/30 to-[#0a0008]/50 mix-blend-multiply"></div>
+          <div class="absolute inset-0 grid-bg-fine opacity-25"></div>
+          <div class="absolute top-5 left-5 z-10">
+            <span class="inline-flex items-center border border-[#e8001c]/50 bg-[#e8001c]/15 px-3 py-1 rounded-full font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c] backdrop-blur-sm" style="font-weight:400;">Mais Procurado</span>
+          </div>
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 p-8 md:p-10 -mt-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="inline-flex items-center border border-[#e8001c]/40 bg-[#e8001c]/10 px-3 py-1 rounded-full font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c]" style="font-weight:400;">CRS.02</span>
+            <span class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Para Editores de Vídeo</span>
+          </div>
+
+          <h4 class="font-display text-[1.25rem] md:text-[1.5rem] uppercase tracking-normal text-[#f2f2f2] leading-[1.1]">
+            Color Grading<br>para Editores
+          </h4>
+
+          <p class="mt-4 text-sm md:text-[0.98rem] text-[#9a9a9a] font-light leading-[1.8] max-w-2xl">
+            Concebido para editores de vídeo que querem dominar o Color Page do DaVinci Resolve. Do node workflow ao finishing cinematográfico — integra a cor no teu processo de edição, perde o medo de enfrentar o DaVinci Resolve e faz uma transição suave.
+          </p>
+
+          <ul class="mt-6 grid sm:grid-cols-2 gap-x-8 gap-y-3 max-w-2xl">
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>Node workflow profissional</span></li>
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>Correção primária e secundária</span></li>
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>Qualifiers e Power Windows</span></li>
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>Continuidade de cor entre planos</span></li>
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>Finishing para cinema e streaming</span></li>
+            <li class="flex items-start gap-3 text-[#c4c4c4] text-sm"><span class="check-dot"></span><span>2 alunos máximo por turma</span></li>
+          </ul>
+
+          <div class="mt-8 pt-6 border-t border-[#1f1f1f] flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Investimento</div>
+              <div class="price-num mt-1">1.190<small>€</small></div>
+              <div class="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a] mt-1">Inclui materiais didáticos e acesso a estúdio</div>
+            </div>
+            <a href="#contacto" class="btn-primary">
+              <span class="inline-flex items-center gap-3"><span class="dot"></span><span>Reservar Vaga</span></span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CURSO 01 FOTOGRAFOS -->
+      <div class="env-card group relative overflow-hidden bg-[#050505] border border-[#1f1f1f]">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Para Fotógrafos</span>
+            <span class="inline-flex items-center border border-[#e8001c]/40 bg-[#e8001c]/10 px-3 py-1 rounded-full font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c]" style="font-weight:400;">CRS.01</span>
+          </div>
+          <h4 class="font-display text-[1rem] uppercase tracking-normal text-[#f2f2f2] leading-[1.15]">Color Grading<br>para Fotografia</h4>
+          <p class="mt-3 text-sm text-[#9a9a9a] font-light leading-relaxed">
+            Domina a linguagem da cor no DaVinci Resolve para elevar o teu trabalho fotográfico. Aprende a criar looks únicos, a usar LUTs e efeitos do DaVinci Resolve, e a exportar com qualidade profissional.
+          </p>
+          <ul class="mt-4 flex flex-col gap-2">
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Teoria da cor e visão criativa</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Workflows RAW para fotografia</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Criação e exportação de LUTs</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Uso de VFX e looks no DaVinci</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>2 alunos máximo por turma</span></li>
+          </ul>
+          <div class="mt-5 pt-4 border-t border-[#1f1f1f]">
+            <div class="flex items-end justify-between">
+              <div>
+                <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Investimento</div>
+                <div class="price-num mt-1" style="font-size:2.2rem;">890<small>€</small></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a] mt-1">Inclui materiais didáticos e acesso a estúdio</div>
+              </div>
+              <a href="#contacto" class="font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c] hover:text-[#ff5566]" style="font-weight:400;">Reservar →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CURSO 03 MASTER -->
+      <div class="env-card group relative overflow-hidden bg-[#050505] border border-[#1f1f1f]">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Formação Completa</span>
+            <span class="inline-flex items-center border border-[#e8001c]/40 bg-[#e8001c]/10 px-3 py-1 rounded-full font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c]" style="font-weight:400;">CRS.03</span>
+          </div>
+          <h4 class="font-display text-[1rem] uppercase tracking-normal text-[#f2f2f2] leading-[1.15]">Master Color<br>Grading</h4>
+          <p class="mt-3 text-sm text-[#9a9a9a] font-light leading-relaxed">
+            O programa mais abrangente: do zero ao nível profissional. Para quem quer tornar-se colorista ou dominar completamente o DaVinci Resolve. A formação mais intensiva e personalizada do mercado ibérico.
+          </p>
+          <ul class="mt-4 flex flex-col gap-2">
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Tudo dos cursos anteriores</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>ACES &amp; Color Management avançado</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>DCTL e automação de cor</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Exemplos reais: publicidade, curtas e videoclips</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Gestão de projetos reais</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>Mentoria pós-curso incluída</span></li>
+            <li class="flex items-start gap-2 text-[#c4c4c4] text-[13px]"><span class="check-dot mt-1.5"></span><span>2 alunos máximo por turma</span></li>
+          </ul>
+          <div class="mt-5 pt-4 border-t border-[#1f1f1f]">
+            <div class="flex items-end justify-between">
+              <div>
+                <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888]" style="font-weight:400;">Investimento</div>
+                <div class="price-num mt-1" style="font-size:2.2rem;">2.490<small>€</small></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6a6a6a] mt-1">Inclui materiais, estúdio e 1 sessão de mentoria</div>
+              </div>
+              <a href="#contacto" class="font-display text-[8px] uppercase tracking-[0.04em] text-[#e8001c] hover:text-[#ff5566]" style="font-weight:400;">Reservar →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 04.5 FIELD REPORTS -->
+<section id="testemunhos" class="relative z-10 overflow-hidden">
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute right-[12%] top-[20%] h-[180px] w-[180px] rounded-full bg-[#e8001c]/[0.03] blur-[100px]"></div>
+  </div>
+  <div class="relative z-10 w-full max-w-[1500px] mx-auto px-4 md:px-8">
+    <div class="testem-wrap">
+      <video class="testem-wrap-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <source src="assets/testemunhos-bg.mp4" type="video/mp4">
+      </video>
+
+      <div class="eyebrow mb-6">
+        <span class="bar"></span>
+        <span class="label">Testemunhos</span>
+      </div>
+
+      <h2 class="section-h2 max-w-[18ch] text-[#f2f2f2] mb-12">
+        O que dizem
+        <span class="block grad-stat font-display">os Alunos</span>
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Testemunho 1 -->
+        <div class="testem-card relative border border-[#1f1f1f]/70 bg-[#0a0a0a]/45 backdrop-blur-sm p-8 env-card rounded-2xl">
+          <div class="field-quote-mark mb-2">"</div>
+          <p class="text-[#c4c4c4] text-[0.98rem] leading-[1.85] font-light">
+            A formação com o Nuno mudou completamente a forma como olho para a imagem. Em dois dias aprendi mais do que em meses de tutoriais online. A experiência em estúdio real não tem comparação.
+          </p>
+          <div class="mt-8 pt-6 border-t border-[#1f1f1f] flex items-center gap-3">
+            <span class="w-2 h-2 bg-[#e8001c]"></span>
+            <div>
+              <div class="font-display text-[#f2f2f2] text-xs">Ana Rodrigues</div>
+              <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888] mt-1" style="font-weight:400;">Fotógrafa Profissional · Lisboa</div>
+            </div>
+          </div>
+        </div>
+        <!-- Testemunho 2 -->
+        <div class="testem-card relative border border-[#1f1f1f]/70 bg-[#0a0a0a]/45 backdrop-blur-sm p-8 env-card rounded-2xl">
+          <div class="field-quote-mark mb-2">"</div>
+          <p class="text-[#c4c4c4] text-[0.98rem] leading-[1.85] font-light">
+            Como editor de vídeo, sempre achei que cor era "apenas" o último passo. O Nuno mostrou-me que é o coração de tudo. O ambiente do estúdio e a atenção personalizada fazem toda a diferença.
+          </p>
+          <div class="mt-8 pt-6 border-t border-[#1f1f1f] flex items-center gap-3">
+            <span class="w-2 h-2 bg-[#e8001c]"></span>
+            <div>
+              <div class="font-display text-[#f2f2f2] text-xs">Miguel Ferreira</div>
+              <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888] mt-1" style="font-weight:400;">Editor de Vídeo · Porto</div>
+            </div>
+          </div>
+        </div>
+        <!-- Testemunho 3 -->
+        <div class="testem-card relative border border-[#1f1f1f]/70 bg-[#0a0a0a]/45 backdrop-blur-sm p-8 env-card rounded-2xl">
+          <div class="field-quote-mark mb-2">"</div>
+          <p class="text-[#c4c4c4] text-[0.98rem] leading-[1.85] font-light">
+            Fiz o curso completo e foi o melhor investimento da minha carreira. O Nuno tem uma capacidade rara de explicar conceitos complexos de forma clara. Recomendo sem reservas.
+          </p>
+          <div class="mt-8 pt-6 border-t border-[#1f1f1f] flex items-center gap-3">
+            <span class="w-2 h-2 bg-[#e8001c]"></span>
+            <div>
+              <div class="font-display text-[#f2f2f2] text-xs">Sofia Lopes</div>
+              <div class="font-display text-[8px] uppercase tracking-[0.04em] text-[#888] mt-1" style="font-weight:400;">Colorista Júnior · Lisboa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05. COLORSHOP -->
+<section id="colorshop" class="relative z-10 pt-28 md:pt-32 pb-14 md:pb-16 bg-[#080808] overflow-hidden">
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+
+    <div class="mb-14">
+      <div class="eyebrow mb-3">
+        <span class="bar"></span>
+        <span class="label">Em Breve</span>
+      </div>
+      <h2 class="section-h2 max-w-[14ch] text-[#f2f2f2]">Color<span class="text-[#e8001c] font-display">Shop</span></h2>
+      <p class="mt-6 max-w-2xl text-[#c4c4c4] text-[1rem] md:text-[1.05rem] font-light leading-[1.85]">
+        A loja de recursos profissionais de Nuno Garcia. Em breve poderás adquirir LUTs cinematográficos, DCTLs exclusivos e pacotes de looks criados ao longo de quase 30 anos de experiência na indústria.
+      </p>
+    </div>
+
+    <!-- Produtos -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+      <!-- LUTs -->
+      <div class="shop-card">
+        <div class="font-display text-[5rem] absolute -top-3 right-4 leading-none pointer-events-none" style="color:rgba(232,0,28,0.06);">LUT</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#e8001c] mb-4">Em Breve</div>
+        <h3 class="font-display text-[1.4rem] text-[#f2f2f2] leading-[1.1] mb-3" style="font-weight:400; letter-spacing:0.05em;">LUTs<br>Cinematográficos</h3>
+        <p class="text-sm text-[#9a9a9a] font-light leading-[1.7] mb-6">Pacotes de LUTs criados a partir de projetos reais — cinema, publicidade e séries. Para DaVinci Resolve, Premiere e Final Cut.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">.cube</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">DaVinci Resolve</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">Premiere Pro</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">Final Cut Pro</span>
+        </div>
+        <div class="border-t border-[#1f1f1f] pt-4">
+          <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888]">Preço a anunciar</div>
+          <div class="font-display text-[1.6rem] text-[#f2f2f2] mt-1" style="font-weight:400;">— €</div>
+        </div>
+        <div class="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] py-3 text-center border border-[#1f1f1f] text-[#888] opacity-60">Disponível Em Breve</div>
+      </div>
+
+      <!-- DCTLs (featured) -->
+      <div class="shop-card shop-card-featured">
+        <div class="font-display text-[4.5rem] absolute -top-3 right-4 leading-none pointer-events-none" style="color:rgba(232,0,28,0.08);">DCTL</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#e8001c] mb-4">Em Breve · Exclusivo</div>
+        <h3 class="font-display text-[1.4rem] text-[#f2f2f2] leading-[1.1] mb-3" style="font-weight:400; letter-spacing:0.05em;">DCTLs<br>Profissionais</h3>
+        <p class="text-sm text-[#9a9a9a] font-light leading-[1.7] mb-6">Scripts DCTL desenvolvidos por Nuno Garcia para automatizar e expandir as capacidades do DaVinci Resolve. Ferramentas que os profissionais usam no dia a dia.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">.dctl</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">DaVinci Resolve</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">Studio</span>
+        </div>
+        <div class="border-t border-[#1f1f1f] pt-4">
+          <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888]">Preço a anunciar</div>
+          <div class="font-display text-[1.6rem] text-[#f2f2f2] mt-1" style="font-weight:400;">— €</div>
+        </div>
+        <div class="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] py-3 text-center border border-[#e8001c] text-[#e8001c] opacity-70">Disponível Em Breve</div>
+      </div>
+
+      <!-- PACOTES -->
+      <div class="shop-card">
+        <div class="font-display text-[4.5rem] absolute -top-2 right-4 leading-none pointer-events-none" style="color:rgba(232,0,28,0.06);">PKG</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#e8001c] mb-4">Em Breve</div>
+        <h3 class="font-display text-[1.4rem] text-[#f2f2f2] leading-[1.1] mb-3" style="font-weight:400; letter-spacing:0.05em;">Pacotes<br>Completos</h3>
+        <p class="text-sm text-[#9a9a9a] font-light leading-[1.7] mb-6">Bundles com LUTs + DCTLs + guias de utilização. Tudo o que precisas para elevar o teu workflow de cor — num único download.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">LUTs + DCTLs</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">Guia PDF</span>
+          <span class="font-mono text-[10px] tracking-[0.1em] border border-[#1f1f1f] px-2 py-0.5 text-[#888]">Suporte</span>
+        </div>
+        <div class="border-t border-[#1f1f1f] pt-4">
+          <div class="font-mono text-[10px] uppercase tracking-[0.15em] text-[#888]">Preço a anunciar</div>
+          <div class="font-display text-[1.6rem] text-[#f2f2f2] mt-1" style="font-weight:400;">— €</div>
+        </div>
+        <div class="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] py-3 text-center border border-[#1f1f1f] text-[#888] opacity-60">Disponível Em Breve</div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="shop-card p-8 md:p-10 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e8001c] mb-2">Sê o primeiro a saber</div>
+        <h3 class="font-display text-[1.3rem] text-[#f2f2f2] mb-2" style="font-weight:400; letter-spacing:0.05em;">Lança em Breve</h3>
+        <p class="text-sm text-[#9a9a9a] font-light leading-[1.6]">Deixa o teu email e recebe um aviso assim que a ColorShop abrir — com desconto exclusivo de lançamento.</p>
+      </div>
+      <form class="newsletter-form" onsubmit="event.preventDefault();">
+        <input type="email" placeholder="o teu email" class="newsletter-input" />
+        <button type="submit" class="newsletter-btn">
+          <span>Avisar-me</span>
+          <span class="dot"></span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- 06. CLOSING VISION + CONTACTO -->
+<section id="contacto" class="relative z-10 py-16 md:py-20 overflow-hidden border-t border-[#1f1f1f]">
+  <div class="pointer-events-none absolute inset-0 z-[1]">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1f1f1f] to-transparent"></div>
+    <div class="absolute inset-0 bg-[#050505]/60"></div>
+    <div class="absolute left-1/2 top-[18%] -translate-x-1/2 h-[260px] w-[640px] bg-[#e8001c]/[0.06] blur-[140px]"></div>
+    <div class="absolute inset-0 grid-bg opacity-[0.06]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+    <!-- Contact + Form -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto items-start">
+      <div>
+        <div class="eyebrow mb-6">
+          <span class="bar"></span>
+          <span class="label">Contacto</span>
+        </div>
+        <h2 class="font-display uppercase leading-[1.1] tracking-normal text-[#f2f2f2] max-w-[18ch]" style="font-size:clamp(1.55rem, 4.2vw, 3.15rem); font-weight:400;">
+          <span class="block">Reserva a</span>
+          <span class="block grad-stat font-display">tua Vaga</span>
+        </h2>
+        <p class="mt-8 max-w-xl text-[1rem] md:text-[1.05rem] text-[#b4b4b4] font-light leading-[1.85]">
+          As vagas são muito limitadas — máximo dois alunos por turma. Entra em contacto para verificar disponibilidade e dar início à tua formação.
+        </p>
+        <div class="space-y-4 mt-12">
+          <div class="flex items-start justify-between gap-6 border-b border-[#1f1f1f] pb-4">
+            <span class="spec-label pt-1">Local</span>
+            <span class="spec-value text-right">Safra · Lisboa, Portugal</span>
+          </div>
+          <div class="flex items-start justify-between gap-6 border-b border-[#1f1f1f] pb-4">
+            <span class="spec-label pt-1">Email</span>
+            <span class="spec-value text-right">info@nunogarcia.pt</span>
+          </div>
+          <div class="flex items-start justify-between gap-6 border-b border-[#1f1f1f] pb-4">
+            <span class="spec-label pt-1">Língua</span>
+            <span class="spec-value text-right">Português / English</span>
+          </div>
+          <div class="flex items-start justify-between gap-6 border-b border-[#1f1f1f] pb-4">
+            <span class="spec-label pt-1">Turmas</span>
+            <span class="spec-value text-right">Máximo 2 alunos · Datas flexíveis</span>
+          </div>
+        </div>
+      </div>
+
+      <form class="border border-[#1f1f1f] bg-[#0a0a0a] p-8 space-y-5 rounded-2xl" onsubmit="event.preventDefault(); alert('Pedido enviado. Em breve te contactamos.');">
+        <div class="field"><label>Nome Completo</label><input type="text" placeholder="O teu nome" required></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="email@exemplo.com" required></div>
+        <div class="field">
+          <label>Curso de Interesse</label>
+          <select required>
+            <option value="" disabled selected>Seleciona um curso</option>
+            <option>Color Grading para Fotografia — 890€</option>
+            <option>Color Grading para Edição — 1.190€</option>
+            <option>Master Color Grading (Completo) — 2.490€</option>
+            <option>Ainda não sei, quero mais informação</option>
+          </select>
+        </div>
+        <div class="field"><label>Mensagem (opcional)</label><textarea rows="4" placeholder="Conta-me um pouco sobre o teu nível de experiência e objetivos..."></textarea></div>
+        <button type="submit" class="btn-primary w-full justify-center">
+          <span class="inline-flex items-center gap-3"><span class="dot"></span><span>Enviar Pedido</span></span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative z-10 border-t border-[#1f1f1f] bg-[#050505] overflow-hidden">
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col items-center gap-6 text-center">
+    <a href="#" class="font-display text-[1.2rem] tracking-[0.15em] uppercase text-[#f2f2f2]" style="font-weight:400;">NUNO<span class="text-[#e8001c]">.</span>GARCIA</a>
+    <div class="font-mono text-[11px] text-[#888] leading-[1.8]">
+      © 2025 Nuno Garcia · Color Grading Master · Lisboa, Portugal<br>
+      Todos os direitos reservados
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="w-1.5 h-1.5 bg-[#e8001c]"></span>
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#d4afaf]">Blackmagic Design Authorized Trainer</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- cursor blur follower -->
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<script>
+(function(){
+  var g = document.getElementById('cursorGlow');
+  if(!g) return;
+  var x=window.innerWidth/2, y=window.innerHeight/2, tx=x, ty=y;
+  document.addEventListener('mousemove', function(e){tx=e.clientX; ty=e.clientY; g.classList.add('active');});
+  document.addEventListener('mouseleave', function(){g.classList.remove('active');});
+  function tick(){x+=(tx-x)*0.18; y+=(ty-y)*0.18; g.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)'; requestAnimationFrame(tick);}
+  tick();
+})();
+</script>
+</body>
+</html>
