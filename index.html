@@ -379,17 +379,56 @@
   .cc-item-dim{color:#888;}
   .cc-bullet{color:#e8001c; flex-shrink:0;}
 
-  /* galeria carousel */
-  .galeria-section{background:#000;}
-  .galeria-stage{position:relative; width:100%; height:80vh; min-height:520px; max-height:780px; overflow:hidden;}
-  .gal-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1.4s ease-in-out; will-change:opacity;}
-  .gal-slide.active{opacity:1;}
-  .galeria-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.75) 100%); pointer-events:none; z-index:2;}
-  .galeria-info{position:absolute; left:0; right:0; bottom:0; padding:3rem 6vw 2.5rem; z-index:3; max-width:1400px; margin:0 auto;}
-  .galeria-dots{display:flex; gap:8px; margin-top:1.5rem;}
-  .gal-dot{width:30px; height:2px; background:rgba(255,255,255,0.25); border:0; cursor:pointer; padding:0; transition:background .3s, width .3s;}
-  .gal-dot.on{background:#e8001c; width:50px;}
-  .gal-dot:hover{background:rgba(232,0,28,0.6);}
+  /* galeria grid */
+  .galeria-section{background:#000; padding:5rem 0 6rem;}
+  .galeria-head{max-width:1400px; margin:0 auto; padding:0 6vw 2.5rem;}
+  .galeria-grid{
+    max-width:1400px; margin:0 auto; padding:0 6vw;
+    display:grid; gap:10px;
+    grid-template-columns:repeat(4, 1fr);
+  }
+  @media (max-width:1024px){ .galeria-grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (max-width:640px){ .galeria-grid{grid-template-columns:repeat(2, 1fr); gap:6px;} }
+  .gal-item{
+    position:relative; overflow:hidden; aspect-ratio:4/3;
+    background:#111; cursor:zoom-in;
+  }
+  .gal-item img{
+    width:100%; height:100%; object-fit:cover; object-position:center;
+    display:block; transition:transform .6s ease, filter .6s ease;
+    filter:grayscale(0.15) contrast(1.02);
+  }
+  .gal-item:hover img{ transform:scale(1.06); filter:grayscale(0) contrast(1.05); }
+  .gal-item::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(232,0,28,0.0) 100%);
+    pointer-events:none; transition:background .4s;
+  }
+  .gal-item:hover::after{ background:linear-gradient(180deg, transparent 50%, rgba(232,0,28,0.25) 100%); }
+
+  /* lightbox */
+  .gal-lightbox{
+    position:fixed; inset:0; background:rgba(0,0,0,0.95);
+    display:none; align-items:center; justify-content:center;
+    z-index:9999; padding:2rem; cursor:zoom-out;
+  }
+  .gal-lightbox.on{display:flex;}
+  .gal-lightbox img{ max-width:95vw; max-height:90vh; object-fit:contain; box-shadow:0 0 60px rgba(232,0,28,0.25);}
+  .gal-lb-close{
+    position:absolute; top:1.5rem; right:1.5rem;
+    background:transparent; border:1px solid rgba(255,255,255,0.4);
+    color:#fff; width:42px; height:42px; border-radius:50%;
+    font-size:1.5rem; cursor:pointer; line-height:1;
+  }
+  .gal-lb-close:hover{ border-color:#e8001c; color:#e8001c; }
+  .gal-lb-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:transparent; border:1px solid rgba(255,255,255,0.4);
+    color:#fff; width:48px; height:48px; border-radius:50%;
+    font-size:1.5rem; cursor:pointer; line-height:1;
+  }
+  .gal-lb-prev{ left:1.5rem; } .gal-lb-next{ right:1.5rem; }
+  .gal-lb-nav:hover{ border-color:#e8001c; color:#e8001c; }
 
   /* vertical rain (metodo) */
   .vrain{position:absolute; inset:0; overflow:hidden; pointer-events:none; mix-blend-mode:screen; opacity:0.7;}
@@ -822,56 +861,97 @@
 </section>
 
 
-<!-- 02d. GALERIA (full-width fade carousel) -->
+<!-- 02d. GALERIA (grid responsivo + lightbox) -->
 <section id="galeria" class="galeria-section relative overflow-hidden">
-  <div class="galeria-stage" role="region" aria-label="Galeria de trabalhos">
-      <div class="gal-slide active" data-i="0" style="background-image:url('assets/gal-01.jpg')"></div>
-      <div class="gal-slide" data-i="1" style="background-image:url('assets/gal-02.jpg')"></div>
-      <div class="gal-slide" data-i="2" style="background-image:url('assets/gal-03.jpg')"></div>
-      <div class="gal-slide" data-i="3" style="background-image:url('assets/gal-04.jpg')"></div>
-      <div class="gal-slide" data-i="4" style="background-image:url('assets/gal-05.jpg')"></div>
-      <div class="gal-slide" data-i="5" style="background-image:url('assets/gal-06.jpg')"></div>
-      <div class="gal-slide" data-i="6" style="background-image:url('assets/gal-07.jpg')"></div>
-      <div class="gal-slide" data-i="7" style="background-image:url('assets/gal-08.jpg')"></div>
-      <div class="gal-slide" data-i="8" style="background-image:url('assets/gal-09.jpg')"></div>
-      <div class="gal-slide" data-i="9" style="background-image:url('assets/gal-10.jpg')"></div>
-      <div class="gal-slide" data-i="10" style="background-image:url('assets/gal-11.jpg')"></div>
-    <div class="galeria-overlay"></div>
-    <div class="galeria-info">
-      <div class="eyebrow">
-        <span class="bar"></span>
-        <span class="label">Trabalhos &amp; Resultados</span>
-      </div>
-      <h2 class="section-h2 mt-3 max-w-[20ch] text-[#f2f2f2]">
-        Imagens que <span class="grad-stat font-display">contam</span> uma história.
-      </h2>
-      <div class="galeria-dots" id="galDots"></div>
+  <div class="galeria-head">
+    <div class="eyebrow">
+      <span class="bar"></span>
+      <span class="label">Trabalhos &amp; Resultados</span>
     </div>
+    <h2 class="section-h2 mt-3 max-w-[20ch] text-[#f2f2f2]">
+      Imagens que <span class="grad-stat font-display">contam</span> uma história.
+    </h2>
+  </div>
+  <div class="galeria-grid" id="galGrid" role="region" aria-label="Galeria de trabalhos">
+    <div class="gal-item" data-i="0"><img loading="lazy" src="assets/gal-01.jpg" alt="Trabalho Nuno Garcia 01"></div>
+    <div class="gal-item" data-i="1"><img loading="lazy" src="assets/gal-02.jpg" alt="Trabalho Nuno Garcia 02"></div>
+    <div class="gal-item" data-i="2"><img loading="lazy" src="assets/gal-03.jpg" alt="Trabalho Nuno Garcia 03"></div>
+    <div class="gal-item" data-i="3"><img loading="lazy" src="assets/gal-04.jpg" alt="Trabalho Nuno Garcia 04"></div>
+    <div class="gal-item" data-i="4"><img loading="lazy" src="assets/gal-05.jpg" alt="Trabalho Nuno Garcia 05"></div>
+    <div class="gal-item" data-i="5"><img loading="lazy" src="assets/gal-06.jpg" alt="Trabalho Nuno Garcia 06"></div>
+    <div class="gal-item" data-i="6"><img loading="lazy" src="assets/gal-07.jpg" alt="Trabalho Nuno Garcia 07"></div>
+    <div class="gal-item" data-i="7"><img loading="lazy" src="assets/gal-08.jpg" alt="Trabalho Nuno Garcia 08"></div>
+    <div class="gal-item" data-i="8"><img loading="lazy" src="assets/gal-09.jpg" alt="Trabalho Nuno Garcia 09"></div>
+    <div class="gal-item" data-i="9"><img loading="lazy" src="assets/gal-10.jpg" alt="Trabalho Nuno Garcia 10"></div>
+    <div class="gal-item" data-i="10"><img loading="lazy" src="assets/gal-11.jpg" alt="Trabalho Nuno Garcia 11"></div>
+    <div class="gal-item" data-i="11"><img loading="lazy" src="assets/gal-12.jpg" alt="Trabalho Nuno Garcia 12"></div>
+    <div class="gal-item" data-i="12"><img loading="lazy" src="assets/gal-13.jpg" alt="Trabalho Nuno Garcia 13"></div>
+    <div class="gal-item" data-i="13"><img loading="lazy" src="assets/gal-14.jpg" alt="Trabalho Nuno Garcia 14"></div>
+    <div class="gal-item" data-i="14"><img loading="lazy" src="assets/gal-15.jpg" alt="Trabalho Nuno Garcia 15"></div>
+    <div class="gal-item" data-i="15"><img loading="lazy" src="assets/gal-16.jpg" alt="Trabalho Nuno Garcia 16"></div>
+    <div class="gal-item" data-i="16"><img loading="lazy" src="assets/gal-17.jpg" alt="Trabalho Nuno Garcia 17"></div>
+    <div class="gal-item" data-i="17"><img loading="lazy" src="assets/gal-18.jpg" alt="Trabalho Nuno Garcia 18"></div>
+    <div class="gal-item" data-i="18"><img loading="lazy" src="assets/gal-19.jpg" alt="Trabalho Nuno Garcia 19"></div>
+    <div class="gal-item" data-i="19"><img loading="lazy" src="assets/gal-20.jpg" alt="Trabalho Nuno Garcia 20"></div>
+    <div class="gal-item" data-i="20"><img loading="lazy" src="assets/gal-21.jpg" alt="Trabalho Nuno Garcia 21"></div>
+    <div class="gal-item" data-i="21"><img loading="lazy" src="assets/gal-22.jpg" alt="Trabalho Nuno Garcia 22"></div>
+    <div class="gal-item" data-i="22"><img loading="lazy" src="assets/gal-23.jpg" alt="Trabalho Nuno Garcia 23"></div>
+    <div class="gal-item" data-i="23"><img loading="lazy" src="assets/gal-24.jpg" alt="Trabalho Nuno Garcia 24"></div>
+    <div class="gal-item" data-i="24"><img loading="lazy" src="assets/gal-25.jpg" alt="Trabalho Nuno Garcia 25"></div>
+    <div class="gal-item" data-i="25"><img loading="lazy" src="assets/gal-26.jpg" alt="Trabalho Nuno Garcia 26"></div>
+    <div class="gal-item" data-i="26"><img loading="lazy" src="assets/gal-27.jpg" alt="Trabalho Nuno Garcia 27"></div>
+    <div class="gal-item" data-i="27"><img loading="lazy" src="assets/gal-28.jpg" alt="Trabalho Nuno Garcia 28"></div>
+    <div class="gal-item" data-i="28"><img loading="lazy" src="assets/gal-29.jpg" alt="Trabalho Nuno Garcia 29"></div>
+    <div class="gal-item" data-i="29"><img loading="lazy" src="assets/gal-30.jpg" alt="Trabalho Nuno Garcia 30"></div>
+    <div class="gal-item" data-i="30"><img loading="lazy" src="assets/gal-31.jpg" alt="Trabalho Nuno Garcia 31"></div>
+    <div class="gal-item" data-i="31"><img loading="lazy" src="assets/gal-32.jpg" alt="Trabalho Nuno Garcia 32"></div>
+  </div>
+
+  <!-- lightbox -->
+  <div class="gal-lightbox" id="galLightbox" role="dialog" aria-label="Visualizacao ampliada">
+    <button class="gal-lb-close" id="galLbClose" aria-label="Fechar">&times;</button>
+    <button class="gal-lb-nav gal-lb-prev" id="galLbPrev" aria-label="Anterior">&#10094;</button>
+    <img id="galLbImg" src="" alt="">
+    <button class="gal-lb-nav gal-lb-next" id="galLbNext" aria-label="Proxima">&#10095;</button>
   </div>
 </section>
 
 <script>
 (function(){
-  var slides = document.querySelectorAll('.gal-slide');
-  var dotsBox = document.getElementById('galDots');
-  if(!slides.length || !dotsBox) return;
+  var items = document.querySelectorAll('#galGrid .gal-item');
+  var lb = document.getElementById('galLightbox');
+  var lbImg = document.getElementById('galLbImg');
+  var lbClose = document.getElementById('galLbClose');
+  var lbPrev = document.getElementById('galLbPrev');
+  var lbNext = document.getElementById('galLbNext');
+  if(!items.length || !lb) return;
   var idx = 0;
-  for (var i=0; i<slides.length; i++){
-    var d = document.createElement('button');
-    d.className = 'gal-dot' + (i===0?' on':'');
-    d.setAttribute('aria-label','Imagem '+(i+1));
-    d.dataset.i = i;
-    d.addEventListener('click', function(e){ go(parseInt(e.currentTarget.dataset.i,10)); });
-    dotsBox.appendChild(d);
+  var total = items.length;
+  function open(i){
+    idx = (i+total)%total;
+    var img = items[idx].querySelector('img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lb.classList.add('on');
+    document.body.style.overflow = 'hidden';
   }
-  function go(n){
-    slides[idx].classList.remove('active');
-    dotsBox.children[idx].classList.remove('on');
-    idx = (n+slides.length)%slides.length;
-    slides[idx].classList.add('active');
-    dotsBox.children[idx].classList.add('on');
+  function close(){
+    lb.classList.remove('on');
+    document.body.style.overflow = '';
   }
-  setInterval(function(){ go(idx+1); }, 4500);
+  items.forEach(function(it, i){
+    it.addEventListener('click', function(){ open(i); });
+  });
+  lbClose.addEventListener('click', function(e){ e.stopPropagation(); close(); });
+  lbPrev.addEventListener('click', function(e){ e.stopPropagation(); open(idx-1); });
+  lbNext.addEventListener('click', function(e){ e.stopPropagation(); open(idx+1); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('on')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') open(idx-1);
+    if(e.key==='ArrowRight') open(idx+1);
+  });
 })();
 </script>
 
