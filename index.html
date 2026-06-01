@@ -88,8 +88,6 @@
   /* card hover */
   .env-card{transition:border-color .5s ease; border-radius:14px; overflow:hidden;}
   .env-card:hover{border-color:rgba(232,0,28,0.35);}
-  /* cube wireframe */
-  .cube-stack > div{transition:transform .7s ease;}
   /* eyebrow */
   .eyebrow{
     display:flex; align-items:center; gap:1rem;
@@ -406,19 +404,57 @@
     100%{transform:translateY(380%);}
   }
 
-  /* metodo cube central image */
-  .cube-core{position:relative;}
-  .cube-img{
-    position:absolute; inset:0;
-    background-image:url('assets/metodo-bg.jpg');
-    background-size:cover; background-position:center;
-    filter:grayscale(0.7) contrast(1) brightness(0.7);
-    opacity:0.55;
+  /* metodo: certificados Blackmagic (polaroid cinema, paisagem 4:3) */
+  .cert-wrap{ display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
+  .cert-stack{
+    position:relative; width:100%; max-width:24rem;
+    aspect-ratio:1 / 0.92;
   }
-  .cube-core::after{
-    content:""; position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(14,14,14,0.25) 0%, rgba(14,14,14,0.75) 100%);
-    pointer-events:none;
+  .cert-card{
+    position:absolute; top:50%; left:50%; width:84%; margin:0;
+    background:#0e0e0e; padding:9px;
+    border:1px solid #2a2a2a; border-radius:8px;
+    box-shadow:0 22px 48px rgba(0,0,0,0.6);
+    transition:transform .55s cubic-bezier(.22,.61,.36,1), box-shadow .55s ease;
+  }
+  .cert-card img{
+    display:block; width:100%; height:auto; border-radius:4px;
+    filter:grayscale(0.55) brightness(0.9);
+    transition:filter .55s ease;
+  }
+  .cert-card--back{
+    transform:translate(-62%,-58%) rotate(-7deg);
+    z-index:1; opacity:0.97;
+  }
+  .cert-card--front{
+    transform:translate(-38%,-42%) rotate(5deg);
+    z-index:2;
+    border-color:rgba(232,0,28,0.32);
+    box-shadow:0 24px 52px rgba(0,0,0,0.65), 0 0 0 1px rgba(232,0,28,0.14);
+  }
+  .cert-stack:hover .cert-card--back{ transform:translate(-66%,-60%) rotate(-10deg); }
+  .cert-stack:hover .cert-card--front{ transform:translate(-34%,-40%) rotate(7deg); }
+  .cert-stack:hover .cert-card img{ filter:grayscale(0) brightness(1); }
+  .cert-badge{
+    position:relative; z-index:3;
+    display:inline-flex; align-items:center; gap:8px;
+    background:#050505; border:1px solid #1f1f1f; border-radius:999px;
+    padding:8px 16px; max-width:100%;
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    letter-spacing:0.07em; text-transform:uppercase; color:#cfcfcf;
+    text-align:center;
+  }
+  .cert-badge-dot{
+    flex:0 0 auto;
+    width:6px; height:6px; border-radius:50%; background:#e8001c;
+    box-shadow:0 0 8px rgba(232,0,28,0.8);
+  }
+  @media (max-width:480px){
+    .cert-stack{ max-width:20rem; }
+    .cert-card{ width:88%; }
+    .cert-card--back{ transform:translate(-58%,-56%) rotate(-5deg); }
+    .cert-card--front{ transform:translate(-42%,-44%) rotate(4deg); }
+    .cert-badge{ font-size:8px; padding:7px 12px; }
   }
 
   /* newsletter form */
@@ -799,7 +835,7 @@
           </div>
         </div>
       </article>
-      <article class="client-card" style="--bg:url('assets/nao-sou-nada-hbomax.jpg')">
+      <article class="client-card" style="--bg:url('assets/hbo-max-streaming.jpg')">
         <div class="cc-inner">
           <div class="cc-tag">Projectos com plataformas: streaming</div>
           <div class="flex flex-col gap-2">
@@ -926,39 +962,23 @@
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e8001c]/40 to-transparent"></div>
         <div class="absolute right-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-[#e8001c]/25 to-transparent"></div>
 
-        <div class="z-10 relative w-full">
-          <div class="relative mx-auto w-full max-w-md h-80 cube-stack">
-            <!-- Wireframe layers, rotated -->
-            <div class="absolute inset-8 border border-[#2a2a2a] rotate-[-22deg]"></div>
-            <div class="absolute inset-4 border border-[#3a3a3a] rotate-[-14deg] bg-[#0a0a0a]/60 backdrop-blur-sm"></div>
-            <div class="absolute inset-0 border border-[#e8001c]/35 rotate-[-6deg] bg-[#0e0e0e] overflow-hidden cube-core"><div class="cube-img"></div></div>
-
-            <!-- corner pixels -->
-            <div class="absolute inset-0 rotate-[-6deg] pointer-events-none">
-              <div class="absolute top-0 left-0 w-3 h-3 border-l border-t border-[#e8001c]"></div>
-              <div class="absolute top-0 right-0 w-3 h-3 border-r border-t border-[#e8001c]"></div>
-              <div class="absolute bottom-0 left-0 w-3 h-3 border-l border-b border-[#e8001c]"></div>
-              <div class="absolute bottom-0 right-0 w-3 h-3 border-r border-b border-[#e8001c]"></div>
-            </div>
-
-            <!-- Step chips -->
-            <div class="absolute -left-4 top-6 flex items-center gap-2">
-              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.01</span>
-              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">Estúdio</div>
-            </div>
-            <div class="absolute right-0 top-24 flex items-center gap-2">
-              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">2 Alunos</div>
-              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.02</span>
-            </div>
-            <div class="absolute left-6 bottom-10 flex items-center gap-2">
-              <span class="flex h-8 w-11 items-center justify-center bg-[#050505] border border-[#1f1f1f] rounded-md font-display text-[8px] text-[#e8001c]" style="font-weight:400;">L.03</span>
-              <div class="inline-flex items-center gap-2 bg-[#12121a] border border-[#1f1f1f] px-3 py-1.5 rounded-full font-display text-[8px] tracking-[0.04em] text-[#f2f2f2] uppercase" style="font-weight:400;">BMD Cert</div>
-            </div>
+        <div class="z-10 relative w-full cert-wrap">
+          <div class="cert-stack">
+            <figure class="cert-card cert-card--back">
+              <img src="assets/cert-beginner-recert.jpg" alt="Certificado Blackmagic Design — Beginner Recert" loading="lazy">
+            </figure>
+            <figure class="cert-card cert-card--front">
+              <img src="assets/cert-introresolve.jpg" alt="Certificado Blackmagic Design — Introduction to DaVinci Resolve" loading="lazy">
+            </figure>
+          </div>
+          <div class="cert-badge">
+            <span class="cert-badge-dot"></span>
+            <span>Blackmagic Design — Authorized Training</span>
           </div>
         </div>
       </div>
 
-      <!-- Right: copy + steps -->
+<!-- Right: copy + steps -->
       <div class="flex flex-col gap-10 h-full justify-center">
         <div class="flex flex-col gap-6">
           <div class="eyebrow">
